@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class FillCatalog {
 
-    public static void readFromFile(File file, ArrayList<String> array,
+    public static boolean readFromFile(File file, ArrayList<String> array,
                                     ArrayList<Integer> arrayIndex, TextField logField)
     {
         Integer titleIndex = 1;
@@ -38,13 +38,14 @@ public class FillCatalog {
             }
             if (index == 0){
                 logField.setText("Неправильный формат");
-                return;
+                return false;
             }
         } catch (FileNotFoundException exc)
         {
             logField.setText("Файл не найден");
-            return;
+            return false;
         }
+        return true;
     }
 
     public static void setCatalog(TreeView<String> catalog, ArrayList<String> array, TextField logField){

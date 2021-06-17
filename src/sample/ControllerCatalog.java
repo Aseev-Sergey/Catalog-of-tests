@@ -45,10 +45,10 @@ public class ControllerCatalog implements Initializable {
 
     public void clickLoadCatalog(ActionEvent actionEvent) {
 
+        catalog.setRoot(new TreeItem<>());
         File file = fileChooser.showOpenDialog(anchorPane.getScene().getWindow());
-        if (file != null) {
+        if (file != null && FillCatalog.readFromFile(file, array, arrayIndex, logField)) {
             pathFile = file.getPath();
-            FillCatalog.readFromFile(file, array, arrayIndex, logField);
             FillCatalog.setCatalog(catalog, array, logField);
         }
         buttonEditor.setDisable(false);
@@ -69,15 +69,6 @@ public class ControllerCatalog implements Initializable {
             }
         });
     }
-
-        private void openFile(File file) {
-            try {
-                this.desktop.open(file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
 
     public void clickEditFile(ActionEvent actionEvent) throws IOException {
         int pathIndex = 0;
