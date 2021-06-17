@@ -44,30 +44,33 @@ public class ControllerCatalog implements Initializable {
     }
 
     public void clickLoadCatalog(ActionEvent actionEvent) {
-
-        catalog.setRoot(new TreeItem<>());
+        
         File file = fileChooser.showOpenDialog(anchorPane.getScene().getWindow());
         if (file != null && FillCatalog.readFromFile(file, array, arrayIndex, logField)) {
             pathFile = file.getPath();
             FillCatalog.setCatalog(catalog, array, logField);
-        }
-        buttonEditor.setDisable(false);
-        selectionModel = catalog.getSelectionModel();
-        selectionModel.selectedItemProperty().addListener(new ChangeListener<TreeItem<String>>(){
+            buttonEditor.setDisable(false);
+            selectionModel = catalog.getSelectionModel();
+            selectionModel.selectedItemProperty().addListener(new ChangeListener<TreeItem<String>>(){
 
-            public void changed(ObservableValue<? extends TreeItem<String>> changed,
-                                TreeItem<String> oldValue, TreeItem<String> newValue){
-                if(newValue != null){
+                public void changed(ObservableValue<? extends TreeItem<String>> changed,
+                                    TreeItem<String> oldValue, TreeItem<String> newValue){
+                    if(newValue != null){
 
-                    pathMarker = newValue.getValue();
-                    TreeItem<String> parent = newValue.getParent();
-                    while(parent != null){
-                        pathMarker = parent.getValue() + "/" + pathMarker;
-                        parent = parent.getParent();
+                        pathMarker = newValue.getValue();
+                        TreeItem<String> parent = newValue.getParent();
+                        while(parent != null){
+                            pathMarker = parent.getValue() + "/" + pathMarker;
+                            parent = parent.getParent();
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            catalog.setRoot(new TreeItem<>());
+            buttonEditor.setDisable(true);
+        }
+
     }
 
     public void clickEditFile(ActionEvent actionEvent) throws IOException {
