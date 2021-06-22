@@ -1,0 +1,10 @@
+@startuml
+
+package sample <<Folder>>{
+class Main extends javafx.application.Application
+class FillCatalog
+class ControllerCatalog implements javafx.fxml.Initializable
+class ControllerEditor
+}
+
+@enduml
