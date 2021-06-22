@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<NotepadPlus>
-    <Session activeView="0">
-        <mainView activeIndex="0">
-            <File firstVisibleLine="192" xOffset="0" scrollWidth="480" startPos="6547" endPos="6547" selMode="0" offset="0" wrapCount="1" lang="&#x041E;&#x0431;&#x044B;&#x0447;&#x043D;&#x044B;&#x0439; &#x0422;&#x0435;&#x043A;&#x0441;&#x0442;" encoding="1251" userReadOnly="no" filename="C:\Users\PC\IdeaProjects\MyShit\catalogOfTests\src\test.txt" backupFilePath="" originalFileLastModifTimestamp="-1375136834" originalFileLastModifTimestampHigh="30892886" mapFirstVisibleDisplayLine="-1" mapFirstVisibleDocLine="-1" mapLastVisibleDocLine="-1" mapNbLine="-1" mapHigherPos="-1" mapWidth="-1" mapHeight="-1" mapKByteInDoc="7471136" mapWrapIndentMode="-1" mapIsWrap="no" />
-        </mainView>
-        <subView activeIndex="0" />
-    </Session>
-</NotepadPlus>
