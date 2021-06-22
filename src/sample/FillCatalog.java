@@ -3,42 +3,18 @@ package sample;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class FillCatalog {
 
-    public static boolean readFromFile(File file, ArrayList<String> array,
-                                    ArrayList<Integer> arrayIndex, TextField logField)
-    {
-        Integer titleIndex = 1;
-        try (Scanner sc = new Scanner(file, "Windows-1251"))
+    public static boolean readFromFile(File file, LinkedList<String> list, TextField logField) {
+
+        try(Scanner sc = new Scanner(file, "Windows-1251"))
         {
-            int index = 0;
-            while (sc.hasNext())
-            {
-                array.add(sc.nextLine());
-                try (Scanner label = new Scanner(array.get(index)))
-                {
-                    if(label.hasNext("[$]Category:")){
-                        int beginIndex = array.get(index).indexOf(' ');
-                        array.set(index, array.get(index).substring(beginIndex+1));
-                        arrayIndex.add(titleIndex);
-                        index++;
-                    }else{ if(array.isEmpty()){
-                        continue;
-                    } else{
-                        array.remove(index);
-                    }}
-                }
-                titleIndex++;
-            }
-            if (index == 0){
-                logField.setText("Неправильный формат");
-                return false;
+            while(sc.hasNext()){
+                list.add(sc.nextLine());
             }
         } catch (FileNotFoundException exc)
         {
@@ -46,75 +22,47 @@ public class FillCatalog {
             return false;
         }
         return true;
+
     }
 
-    public static void setCatalog(TreeView<String> catalog, ArrayList<String> array, TextField logField){
+    private static int fillValue(int index, LinkedList<String> list, StringBuilder stringBuilder){
+        do{
+            stringBuilder.append(list.get(index).trim()).append('\n');
+            index++;
+        } while(index < list.size() && !(list.get(index).startsWith("$Category:")));
+        return index;
+    }
+
+    public static void setCatalog(TreeView<String> catalog, LinkedList<String> list,
+                                  HashMap<String, StringBuilder> hashMap, TextField logField){
 
         int index = 0;
-        TreeItem<String> rootTreeNode = new TreeItem<>(array.get(index));
-        TreeItem<String> levelOne = new TreeItem<>("Ошибка уровня 1");
-        TreeItem<String> levelTwo = new TreeItem<>("Ошибка уровня 2");;
-        TreeItem<String> levelThree = new TreeItem<>("Ошибка уровня 3");;
-        index++;
-        String[] prevStr = array.get(index).split("/");
-        switch (prevStr.length){
-            case 2:
-                levelOne = new TreeItem<>(prevStr[1]);
-                rootTreeNode.getChildren().add(levelOne);
-                break;
-            case 3:
-                levelOne = new TreeItem<>(prevStr[1]);
-                levelTwo = new TreeItem<>(prevStr[2]);
-                levelOne.getChildren().add(levelTwo);
-                rootTreeNode.getChildren().add(levelOne);
-                break;
-            case 4:
-                levelOne = new TreeItem<>(prevStr[1]);
-                levelTwo = new TreeItem<>(prevStr[2]);
-                levelOne.getChildren().add(levelTwo);
-                levelThree = new TreeItem<>(prevStr[3]);
-                levelTwo.getChildren().add(levelThree);
-                rootTreeNode.getChildren().add(levelOne);
-            default: break;
-        }
-        index++;
-        while(index < array.size()){
-            String[] nextStr = array.get(index).split("/");
-            if(prevStr.length != 2){
-                if(prevStr[1].equals(nextStr[1])){
-                    if(prevStr[2].equals(nextStr[2])){
-                        levelThree = new TreeItem<>(nextStr[3]);
-                        levelTwo.getChildren().add(levelThree);
+        TreeItem<String> rootTreeNode = new TreeItem<>(list.get(index));
+        String prevStr = list.get(index++);
+        while(index < list.size()){
+            String nextStr = list.get(index);
+            if(prevStr.startsWith("$Category:") && !(nextStr.startsWith("$Category:"))){
+                StringBuilder stringBuilder = new StringBuilder();
+                index = fillValue(index, list, stringBuilder);
+                hashMap.put(prevStr, stringBuilder);
+                String[] packages = prevStr.split("/");
+                for(String packageName : packages) {
+                    if(rootTreeNode.getChildren().contains(rootTreeNode.getChildren().indexOf(packageName))) {
+                        TreeItem<String> packageNode = rootTreeNode.getChildren().
+                                get(rootTreeNode.getChildren().indexOf(packageName));
+                        packageNode.getChildren().add(new TreeItem<String>(packageName));
+                    } else {
+                        rootTreeNode.getChildren().add(new TreeItem<String>(packageName));
                     }
-                    else {
-                        levelTwo = new TreeItem<>(nextStr[2]);
-                        levelOne.getChildren().add(levelTwo);
-                    }
-                } else {
-                    levelOne = new TreeItem<>(nextStr[1]);
-                    rootTreeNode.getChildren().add(levelOne);
                 }
-            } else {
-                switch (nextStr.length){
-                    case 2:
-                        levelOne = new TreeItem<>(nextStr[1]);
-                        rootTreeNode.getChildren().add(levelOne);
-                        break;
-                    case 3:
-                        levelTwo = new TreeItem<>(nextStr[2]);
-                        levelOne.getChildren().add(levelTwo);
-                        break;
-                    case 4:
-                        levelTwo = new TreeItem<>(nextStr[2]);
-                        levelOne.getChildren().add(levelTwo);
-                        levelThree = new TreeItem<>(nextStr[3]);
-                        levelTwo.getChildren().add(levelThree);
-                        break;
-                    default: break;
-                }
+                if(index < list.size()) {
+                    prevStr = list.get(index++);
+                } else{ break;}
+
+            } else{
+                prevStr = nextStr;
+                index++;
             }
-            prevStr = nextStr.clone();
-            index++;
         }
         catalog.setRoot(rootTreeNode);
         logField.setText("Каталог загружен");

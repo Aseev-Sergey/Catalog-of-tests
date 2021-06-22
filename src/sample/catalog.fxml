@@ -18,7 +18,7 @@
                   <TextField fx:id="logField" disable="true" text="Состояние загрузки" />
                </children>
             </HBox>
-            <Button fx:id="buttonEditor" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#clickEditFile" prefHeight="22.0" prefWidth="108.0" text="В редакторе" />
+            <Button fx:id="buttonEditor" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#clickEditFile" prefHeight="22.0" prefWidth="108.0" text="Редактировать" />
          </children>
       </VBox>
    </children>
