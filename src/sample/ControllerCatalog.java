@@ -92,7 +92,7 @@ public class ControllerCatalog implements Initializable {
         secondaryStage.initOwner(buttonEditor.getScene().getWindow());
         secondaryStage.setTitle("Редактор");
         ControllerEditor controller = loader.getController();
-        controller.setText(hashMap.get("pathMarker));
+        controller.setText(hashMap.get(pathMarker));
         secondaryStage.show();
     }
 
