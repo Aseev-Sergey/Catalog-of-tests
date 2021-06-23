@@ -85,15 +85,22 @@ public class ControllerCatalog implements Initializable {
 
     public void clickEditFile(ActionEvent actionEvent) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("editor.fxml"));
-        Stage secondaryStage = new Stage();
-        secondaryStage.setScene(new Scene(loader.load()));
-        secondaryStage.initModality(Modality.WINDOW_MODAL);
-        secondaryStage.initOwner(buttonEditor.getScene().getWindow());
-        secondaryStage.setTitle("Редактор");
-        ControllerEditor controller = loader.getController();
-        controller.setText(hashMap.get(pathMarker));
-        secondaryStage.show();
+        if(hashMap.containsKey(pathMarker)){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("editor.fxml"));
+            Stage secondaryStage = new Stage();
+            secondaryStage.setScene(new Scene(loader.load()));
+            secondaryStage.initModality(Modality.WINDOW_MODAL);
+            secondaryStage.initOwner(buttonEditor.getScene().getWindow());
+            secondaryStage.setTitle("Редактор");
+            ControllerEditor controller = loader.getController();
+            controller.setText(hashMap.get(pathMarker));
+            secondaryStage.show();
+        } else{
+            logField.setText("Каталог пуст");
+        }
+        
+        
+        
     }
 
 
